@@ -1579,7 +1579,7 @@ function draw() {
   wrap.className = 'w-full rounded-xl overflow-hidden border border-dark-600 transition-colors duration-300 flex items-center justify-center shadow-inner ' + wrapStyle;
   
   const pv = document.getElementById('prev');
-  pv.innerHTML = r.svg.replace('width="1000" height="700"', 'width="100%" height="auto" class="block"');
+  pv.innerHTML = r.svg.replace('width="1000" height="700"', 'width="100%" class="block"');
   document.getElementById('code').textContent = r.svg;
   renderMockup();
 }
