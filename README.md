@@ -2,7 +2,7 @@
 
 **From a sentence to a symbol.** Descriptive SVG Studio PRO turns plain-language
 descriptions in English or Persian into clean, scalable vector logos, wordmarks and
-icon sets. It runs entirely in the browser — no account, no upload, no server.
+icon sets. It runs entirely in the browser , no account, no upload, no server.
 
 ## Files
 
