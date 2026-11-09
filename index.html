@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SVG Studio PRO — From a Sentence to a Symbol</title>
+<meta name="description" content="Type a description in English or Persian and get a clean, scalable SVG logo, wordmark or icon set. Descriptive SVG Studio PRO runs 100% in your browser — offline.">
+<meta name="author" content="Hassan Samimi">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#050D0A">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500..900;1,9..144,500..900&family=Instrument+Sans:ital,wght@0,400..600;1,400&family=Inter:wght@700;900&family=JetBrains+Mono:wght@400;500&family=Vazirmatn:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#050D0A;
+    --ink-2:#08130F;
+    --panel:#0A1712;
+    --paper:#EDF6EE;
+    --muted:#9BB0A2;
+    --dim:#83998C;
+    --mint:#7CFFB2;
+    --green:#00E676;
+    --azure:#00B0FF;
+    --line:rgba(160,255,200,.14);
+    --line-strong:rgba(160,255,200,.3);
+    --display:"Fraunces",Georgia,"Times New Roman",serif;
+    --sans:"Instrument Sans","Segoe UI",system-ui,sans-serif;
+    --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+    --fa:"Vazirmatn",Tahoma,sans-serif;
+  }
+
+  *,*::before,*::after{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    background:var(--ink);
+    color:var(--paper);
+    font-family:var(--sans);
+    font-size:16px;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;
+    background:
+      radial-gradient(900px 520px at 84% -8%,rgba(0,230,118,.15),transparent 62%),
+      radial-gradient(760px 520px at -6% 34%,rgba(0,176,255,.10),transparent 60%),
+      radial-gradient(700px 420px at 50% 108%,rgba(0,230,118,.06),transparent 65%);
+  }
+  body::after{
+    content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+    background-image:
+      linear-gradient(rgba(160,255,200,.045) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(160,255,200,.045) 1px,transparent 1px);
+    background-size:84px 84px;
+    -webkit-mask-image:radial-gradient(ellipse 85% 65% at 50% 18%,#000 15%,transparent 82%);
+    mask-image:radial-gradient(ellipse 85% 65% at 50% 18%,#000 15%,transparent 82%);
+  }
+  ::selection{background:var(--mint);color:#04130C}
+  svg{display:block}
+  img{max-width:100%}
+  a{color:inherit}
+  :focus-visible{outline:2px solid var(--mint);outline-offset:3px;border-radius:4px}
+
+  .wrap{width:min(1240px,calc(100% - clamp(40px,10vw,112px)));margin-inline:auto}
+  .mono{font-family:var(--mono);font-size:11px;letter-spacing:.06em}
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+
+  .skip{position:absolute;left:16px;top:-70px;z-index:100;background:var(--mint);color:var(--ink);font-weight:600;text-decoration:none;padding:10px 16px;border-radius:8px;transition:top .2s ease}
+  .skip:focus{top:12px}
+
+  /* ---------- buttons ---------- */
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:10px;
+    background:var(--mint);color:#04130C;text-decoration:none;
+    font-weight:600;font-size:14px;line-height:1;padding:15px 24px;border-radius:999px;
+    border:1px solid transparent;
+    box-shadow:0 10px 34px -14px rgba(124,255,178,.55);
+    transition:transform .25s ease,background .25s ease,box-shadow .25s ease,border-color .25s ease;
+  }
+  .btn span{transition:transform .25s ease}
+  .btn:hover{background:#A8FFC9;transform:translateY(-1px)}
+  .btn:hover span{transform:translate(3px,-1px)}
+  .btn--ghost{background:transparent;color:var(--paper);border-color:var(--line-strong);box-shadow:none}
+  .btn--ghost:hover{background:rgba(124,255,178,.06);border-color:var(--mint)}
+  .btn--sm{padding:11px 17px;font-size:12.5px}
+
+  /* ---------- nav ---------- */
+  .nav{
+    position:sticky;top:0;z-index:60;
+    border-bottom:1px solid var(--line);
+    background:rgba(5,13,10,.74);
+    -webkit-backdrop-filter:blur(16px) saturate(140%);
+    backdrop-filter:blur(16px) saturate(140%);
+  }
+  .nav__in{height:76px;display:flex;align-items:center;justify-content:space-between;gap:24px}
+  .brand{display:inline-flex;align-items:center;gap:11px;text-decoration:none;color:var(--paper)}
+  .brand__mark{width:34px;height:34px;border-radius:9px;box-shadow:0 0 26px rgba(0,230,118,.22);flex:none}
+  .brand__word{font-weight:600;font-size:15px;letter-spacing:-.015em;white-space:nowrap}
+  .brand__word em{
+    font-style:normal;font-family:var(--mono);font-size:9px;letter-spacing:.12em;
+    color:var(--mint);border:1px solid var(--line-strong);border-radius:5px;
+    padding:2px 5px;margin-left:3px;vertical-align:.35em;
+  }
+  .nav__links{display:flex;gap:34px}
+  .nav__links a{
+    position:relative;color:var(--muted);text-decoration:none;font-size:13.5px;padding-block:4px;
+    transition:color .2s ease;
+  }
+  .nav__links a::after{
+    content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--mint);
+    transform:scaleX(0);transform-origin:left;transition:transform .3s ease;
+  }
+  .nav__links a:hover{color:var(--paper)}
+  .nav__links a:hover::after{transform:scaleX(1)}
+  .nav .btn{flex:none}
+
+  /* ---------- hero ---------- */
+  .hero{position:relative;padding-block:clamp(52px,7vw,104px) clamp(40px,5vw,76px)}
+  .hero__grid{
+    display:grid;grid-template-columns:minmax(0,1.06fr) minmax(0,.94fr);
+    gap:clamp(36px,5vw,72px);align-items:center;
+  }
+  .hero__copy{min-width:0}
+  .eyebrow{
+    display:flex;align-items:center;gap:12px;margin:0 0 24px;
+    font-family:var(--mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--mint);
+  }
+  .pill{
+    font-family:var(--mono);font-size:9px;letter-spacing:.14em;color:#04130C;background:var(--mint);
+    padding:3px 6px;border-radius:4px;
+  }
+  h1{
+    font-family:var(--display);font-optical-sizing:auto;font-weight:800;
+    font-size:clamp(2.45rem,5.1vw,4.1rem);line-height:.97;letter-spacing:-.035em;
+    margin:0;text-wrap:balance;
+  }
+  h1 em{font-style:italic;font-weight:700;color:var(--mint)}
+  .grad{
+    background:linear-gradient(100deg,#7CFFB2 0%,#00E676 48%,#00B0FF 100%);
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;color:var(--mint);
+  }
+  .hero__lede{
+    max-width:47ch;margin:26px 0 0;color:var(--muted);
+    font-size:clamp(15px,1.15vw,17px);line-height:1.72;
+  }
+  .hero__fa{
+    display:flex;align-items:center;gap:10px;margin:20px 0 0;
+    font-family:var(--fa);font-size:13.5px;color:var(--dim);
+  }
+  .hero__fa .tag{
+    font-family:var(--mono);font-size:8.5px;letter-spacing:.1em;color:var(--dim);
+    border:1px solid var(--line);padding:2px 5px;border-radius:4px;
+  }
+  .hero__cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px}
+  .hero__meta{
+    display:flex;flex-wrap:wrap;gap:10px 22px;list-style:none;
+    margin:26px 0 0;padding:0;
+    font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);
+  }
+  .hero__meta li{display:flex;align-items:center;gap:8px}
+  .hero__meta li::before{content:"";width:4px;height:4px;border-radius:50%;background:var(--mint);opacity:.7}
+
+  /* ---------- artboard ---------- */
+  .artboard{
+    position:relative;margin:0;transform:rotate(1.1deg);min-width:0;
+    transition:transform .7s cubic-bezier(.2,.8,.2,1);
+  }
+  .artboard:hover{transform:rotate(0)}
+  .artboard::before{
+    content:"";position:absolute;inset:-13% -9%;z-index:-1;
+    background:radial-gradient(closest-side,rgba(0,230,118,.2),transparent 72%);
+    filter:blur(28px);
+  }
+  .artboard__chrome,.artboard__foot{
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+    padding:10px 14px;background:rgba(9,22,17,.92);
+    font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;color:var(--dim);
+  }
+  .artboard__chrome{border:1px solid var(--line);border-bottom:0;border-radius:14px 14px 0 0}
+  .artboard__foot{border:1px solid var(--line);border-top:0;border-radius:0 0 14px 14px;font-size:9.5px}
+  .artboard__stage{
+    border-inline:1px solid var(--line);background:#04100B;
+    padding:clamp(10px,1.5vw,18px);position:relative;overflow:hidden;
+  }
+  .artboard__stage::after{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:linear-gradient(180deg,transparent 65%,rgba(0,230,118,.05));
+  }
+  .logo{width:100%;height:auto;border-radius:9px;position:relative;z-index:1}
+  .dots{display:flex;gap:4px;flex:none}
+  .dots i{width:6px;height:6px;border-radius:50%;background:rgba(237,246,238,.2)}
+  .meta--ok{color:var(--mint);white-space:nowrap}
+  .prompt{color:#C9DCD0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .prompt .caret{color:var(--mint);margin-right:4px}
+  .chip{
+    position:absolute;z-index:2;
+    font-family:var(--mono);font-size:9.5px;letter-spacing:.04em;color:#D3E9DC;
+    background:rgba(10,23,18,.88);border:1px solid var(--line-strong);border-radius:999px;
+    padding:6px 11px;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+    box-shadow:0 14px 34px -18px #000;
+    animation:float 7s ease-in-out infinite;
+  }
+  .chip--1{top:15%;left:-6%;animation-delay:-1s}
+  .chip--2{bottom:24%;right:-7%;animation-delay:-3.5s}
+  .chip--3{top:54%;right:-4%;animation-delay:-2s;color:var(--mint)}
+
+  /* ---------- ticker ---------- */
+  .ticker{
+    border-block:1px solid var(--line);overflow:hidden;padding-block:15px;
+    background:linear-gradient(90deg,rgba(124,255,178,.035),transparent 40%,rgba(0,176,255,.035));
+    -webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);
+    mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);
+  }
+  .ticker__track{display:flex;width:max-content;animation:marquee 46s linear infinite}
+  .ticker:hover .ticker__track{animation-play-state:paused}
+  .ticker__group{display:flex;flex:none}
+  .ticker__group span{
+    display:flex;align-items:center;gap:clamp(26px,3vw,46px);
+    padding-right:clamp(26px,3vw,46px);
+    font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+    color:#8FA79A;white-space:nowrap;
+  }
+  .ticker__group span::after{content:"◆";font-size:5px;color:var(--mint);opacity:.7}
+
+  /* ---------- sections ---------- */
+  .section{padding-block:clamp(70px,9vw,122px);border-top:1px solid var(--line);scroll-margin-top:90px}
+  .ticker + .section{border-top:0}
+  .section--engine{background:linear-gradient(180deg,rgba(0,176,255,.03),transparent 42%)}
+  .kicker{
+    display:flex;align-items:center;gap:12px;margin:0;
+    font-family:var(--mono);font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--mint);
+  }
+  .kicker::before{content:"";width:26px;height:1px;background:var(--mint);opacity:.55;flex:none}
+  .sec-head{
+    display:grid;grid-template-columns:1.2fr .8fr;gap:clamp(18px,4vw,64px);
+    align-items:end;margin-bottom:clamp(34px,5vw,58px);
+  }
+  .sec-head h2,.creator h2,.finale h2{
+    font-family:var(--display);font-optical-sizing:auto;font-weight:800;
+    letter-spacing:-.03em;line-height:1.02;margin:16px 0 0;text-wrap:balance;
+  }
+  .sec-head h2{font-size:clamp(2.1rem,4.2vw,3.5rem)}
+  .lead{margin:0;color:var(--muted);font-size:15.5px;line-height:1.7;max-width:46ch;padding-bottom:4px}
+
+  /* ---------- features ---------- */
+  .features{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:1px;
+    background:var(--line);border:1px solid var(--line);border-radius:18px;overflow:hidden;
+  }
+  .feature{
+    position:relative;padding:clamp(22px,3vw,32px);min-height:252px;background:var(--ink);
+    background-image:linear-gradient(180deg,rgba(124,255,178,.035),transparent 62%);
+    transition:background-color .3s ease;
+  }
+  .feature:hover{background-color:var(--ink-2);background-image:linear-gradient(180deg,rgba(124,255,178,.075),transparent 70%)}
+  .feature__num{
+    position:absolute;top:clamp(22px,3vw,32px);right:clamp(22px,3vw,32px);
+    font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;color:var(--dim);
+  }
+  .feature__icon{width:25px;height:25px;color:var(--mint);stroke-width:1.5;margin-bottom:28px}
+  .feature h3{
+    font-family:var(--display);font-weight:700;font-size:1.32rem;line-height:1.15;
+    letter-spacing:-.01em;margin:0 0 10px;
+  }
+  .feature p{margin:0;color:var(--muted);font-size:13.8px;line-height:1.68}
+
+  /* ---------- engine ---------- */
+  .parse{
+    display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;gap:18px;align-items:center;
+    border:1px solid var(--line);border-radius:14px;background:rgba(9,20,15,.6);
+    padding:14px 18px;margin-bottom:14px;
+  }
+  .parse__label{font-family:var(--mono);font-size:8.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim)}
+  .parse__input{margin:0;font-size:13.5px;line-height:1.5;color:var(--paper);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .parse__arrow{font-family:var(--mono);color:var(--mint);font-size:15px}
+  .parse__out{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end}
+  .parse__out span{
+    font-family:var(--mono);font-size:9.5px;letter-spacing:.02em;color:var(--mint);
+    border:1px solid var(--line);background:rgba(124,255,178,.05);border-radius:6px;padding:3px 7px;
+  }
+  .spec{
+    display:grid;grid-template-columns:repeat(3,1fr);
+    border:1px solid var(--line);border-radius:18px;background:rgba(8,19,15,.55);overflow:hidden;
+  }
+  .spec__col{padding:clamp(22px,3vw,32px)}
+  .spec__col + .spec__col{border-left:1px solid var(--line)}
+  .spec h3{
+    margin:0 0 16px;font-family:var(--mono);font-size:9.5px;font-weight:500;
+    letter-spacing:.18em;text-transform:uppercase;color:var(--mint);
+  }
+  .spec__note{margin:16px 0 8px;font-size:12px;color:var(--dim)}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;list-style:none;margin:0;padding:0}
+  .chips li{
+    font-family:var(--mono);font-size:10px;letter-spacing:.01em;color:#C9DCD0;
+    border:1px solid var(--line);background:rgba(255,255,255,.015);
+    border-radius:999px;padding:5px 9px;
+    transition:border-color .2s ease,background .2s ease,color .2s ease;
+  }
+  .chips li:hover{border-color:var(--line-strong);background:rgba(124,255,178,.07);color:var(--paper)}
+  .engine__cta{margin:26px 0 0;text-align:right}
+  .engine__cta a{
+    color:var(--mint);text-decoration:none;font-size:13px;
+    border-bottom:1px solid var(--line-strong);padding-bottom:3px;
+    transition:border-color .2s ease;
+  }
+  .engine__cta a:hover{border-color:var(--mint)}
+  .engine__cta span{font-family:var(--mono);margin-left:6px}
+
+  /* ---------- creator ---------- */
+  .creator{
+    position:relative;display:grid;grid-template-columns:210px minmax(0,1fr);
+    gap:clamp(26px,4vw,52px);align-items:center;
+    border:1px solid var(--line);border-radius:24px;
+    padding:clamp(24px,4vw,44px);margin-top:26px;overflow:hidden;
+    background:
+      radial-gradient(560px 380px at 2% 0%,rgba(0,230,118,.11),transparent 62%),
+      rgba(8,19,15,.5);
+  }
+  .creator__portrait{
+    position:relative;aspect-ratio:1;border-radius:20px;overflow:hidden;
+    border:1px solid var(--line-strong);box-shadow:0 30px 60px -30px rgba(0,0,0,.8);
+  }
+  .creator__portrait img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(.92) contrast(1.02)}
+  .creator__handle{
+    position:absolute;left:10px;bottom:10px;
+    font-family:var(--mono);font-size:8.5px;letter-spacing:.04em;color:#E2F7E9;
+    background:rgba(4,13,9,.82);border:1px solid var(--line);border-radius:999px;padding:4px 8px;
+    -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  }
+  .creator h2{font-size:clamp(2rem,3.4vw,2.9rem);margin:0 0 12px}
+  .creator__body > p{margin:0 0 24px;color:var(--muted);max-width:50ch;font-size:15px;line-height:1.7}
+  .socials{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+  .socials a{
+    display:grid;grid-template-columns:104px minmax(0,1fr) auto;gap:16px;align-items:center;
+    padding:12px 2px;border-bottom:1px solid var(--line);text-decoration:none;color:var(--paper);
+    transition:color .2s ease,padding .2s ease;
+  }
+  .socials a:hover{color:var(--mint);padding-left:8px}
+  .s-name{font-family:var(--mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
+  .s-handle{font-size:13.5px;color:var(--muted);overflow:hidden;text-overflow:ellipsis}
+  .socials a:hover .s-handle{color:var(--paper)}
+  .s-arrow{font-family:var(--mono);color:var(--dim);transition:transform .2s ease,color .2s ease}
+  .socials a:hover .s-arrow{color:var(--mint);transform:translate(2px,-2px)}
+
+  /* ---------- finale + footer ---------- */
+  .finale{
+    position:relative;text-align:center;overflow:hidden;
+    padding-block:clamp(88px,12vw,158px) clamp(62px,8vw,100px);
+    border-top:1px solid var(--line);
+  }
+  .finale::before{
+    content:"";position:absolute;left:50%;top:0;width:min(900px,92vw);aspect-ratio:2/1;
+    transform:translate(-50%,-42%);pointer-events:none;
+    background:radial-gradient(closest-side,rgba(0,230,118,.17),transparent 70%);
+    filter:blur(18px);
+  }
+  .finale .kicker{justify-content:center}
+  .finale h2{
+    font-size:clamp(2.9rem,8vw,6.8rem);line-height:.95;letter-spacing:-.04em;
+    margin:22px 0 18px;
+  }
+  .finale h2 em{font-style:italic;font-weight:700}
+  .finale p{margin:0 auto 34px;max-width:42ch;color:var(--muted);font-size:15px}
+  .footer{border-top:1px solid var(--line);padding-block:26px}
+  .footer__in{
+    display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px 24px;
+    font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;color:var(--dim);
+  }
+  .footer__brand{display:flex;align-items:center;gap:9px;color:var(--muted);text-decoration:none}
+  .footer__brand svg{width:20px;height:20px;border-radius:5px;flex:none}
+  .footer__brand:hover{color:var(--paper)}
+  .footer__link{color:var(--muted);text-decoration:none}
+  .footer__link:hover{color:var(--mint)}
+
+  /* ---------- motion ---------- */
+  @keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+  @keyframes fade{from{opacity:0}to{opacity:1}}
+  @keyframes float{0%,100%{transform:translateY(-4px)}50%{transform:translateY(4px)}}
+  @keyframes marquee{to{transform:translateX(-50%)}}
+  .hero__copy > *{animation:rise .85s cubic-bezier(.2,.8,.2,1) both}
+  .hero__copy > *:nth-child(1){animation-delay:.04s}
+  .hero__copy > *:nth-child(2){animation-delay:.1s}
+  .hero__copy > *:nth-child(3){animation-delay:.17s}
+  .hero__copy > *:nth-child(4){animation-delay:.23s}
+  .hero__copy > *:nth-child(5){animation-delay:.29s}
+  .hero__copy > *:nth-child(6){animation-delay:.34s}
+  .artboard{animation:fade 1s ease .18s both}
+
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    *,*::before,*::after{animation:none!important;transition:none!important}
+  }
+
+  /* ---------- responsive ---------- */
+  @media (max-width:980px){
+    .hero__grid{grid-template-columns:minmax(0,1fr);gap:clamp(38px,6vw,58px)}
+    .artboard{width:100%;max-width:620px;justify-self:center}
+    .chip{display:none}
+    .sec-head{grid-template-columns:1fr;gap:16px;align-items:start}
+    .lead{max-width:62ch}
+    .creator{grid-template-columns:170px minmax(0,1fr)}
+  }
+  @media (max-width:900px){
+    .nav__links{display:none}
+    .features{grid-template-columns:repeat(2,1fr)}
+    .spec{grid-template-columns:1fr}
+    .spec__col + .spec__col{border-left:0;border-top:1px solid var(--line)}
+    .parse{grid-template-columns:1fr;gap:10px}
+    .parse__arrow{display:none}
+    .parse__out{justify-content:flex-start}
+    .engine__cta{text-align:left}
+  }
+  @media (max-width:680px){
+    .features{grid-template-columns:1fr}
+    .feature{min-height:0}
+    .creator{grid-template-columns:1fr;padding:24px;gap:24px}
+    .creator__portrait{width:150px}
+    .socials a{grid-template-columns:84px minmax(0,1fr) auto;gap:10px}
+    .footer__in{justify-content:flex-start}
+  }
+  @media (max-width:520px){
+    .hero__cta{flex-direction:column;align-items:stretch}
+    .hero__cta .btn{width:100%}
+    .artboard{transform:none}
+    .nav__in{height:64px}
+    .hero{padding-top:40px}
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="nav">
+  <div class="wrap nav__in">
+    <a class="brand" href="#top" aria-label="SVG Studio PRO — back to top">
+      <svg class="brand__mark" viewBox="0 0 200 200" aria-hidden="true">
+        <defs>
+          <linearGradient id="navG" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#7CFFB2"/><stop offset="50%" stop-color="#00E676"/><stop offset="100%" stop-color="#00B0FF"/>
+          </linearGradient>
+        </defs>
+        <rect width="200" height="200" rx="44" fill="#071C15"/>
+        <circle cx="100" cy="100" r="78" fill="none" stroke="url(#navG)" stroke-width="6"/>
+        <circle cx="100" cy="100" r="86" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width="2" stroke-dasharray="8 6"/>
+        <circle cx="100" cy="100" r="55" fill="url(#navG)" opacity=".18"/>
+        <path d="M48,84 Q74,56 100,84 T152,84" fill="none" stroke="url(#navG)" stroke-width="14" stroke-linecap="round"/>
+        <path d="M48,110 Q74,82 100,110 T152,110" fill="none" stroke="#00E676" stroke-width="14" stroke-linecap="round"/>
+        <path d="M64,135 Q82,115 100,135 T136,135" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round" opacity=".9"/>
+      </svg>
+      <span class="brand__word">SVG Studio<em>PRO</em></span>
+    </a>
+    <nav class="nav__links" aria-label="Primary">
+      <a href="#features">Features</a>
+      <a href="#engine">Engine</a>
+      <a href="#creator">Creator</a>
+    </nav>
+    <a class="btn btn--sm" href="studio.html">Open studio <span aria-hidden="true">↗</span></a>
+  </div>
+</header>
+
+<main id="main">
+  <section class="hero" id="top">
+    <div class="wrap hero__grid">
+      <div class="hero__copy">
+        <p class="eyebrow"><span class="pill">PRO</span> Descriptive SVG Studio</p>
+        <h1>From a <em>sentence</em><br>to a <span class="grad">symbol.</span></h1>
+        <p class="hero__lede">Type the logo you can see in your head. SVG Studio PRO reads shape, palette, ornaments and type from your words — and draws a clean, editable vector mark in the browser. No model to rent. No files to upload.</p>
+        <p class="hero__fa"><span class="tag">FA</span><span lang="fa" dir="rtl">از یک جمله تا یک نشان.</span></p>
+        <div class="hero__cta">
+          <a class="btn" href="studio.html">Start designing <span aria-hidden="true">→</span></a>
+          <a class="btn btn--ghost" href="#engine">See what it understands</a>
+        </div>
+        <ul class="hero__meta">
+          <li>No sign-up</li><li>No uploads</li><li>Runs in your browser</li>
+        </ul>
+      </div>
+
+      <figure class="artboard">
+        <div class="artboard__chrome">
+          <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span>logo.svg · 1000 × 700</span>
+          <span>SVG</span>
+        </div>
+        <div class="artboard__stage">
+          <svg class="logo" viewBox="0 0 1000 700" role="img" aria-labelledby="logoTitle logoDesc">
+            <title id="logoTitle">SVG Studio</title>
+            <desc id="logoDesc">Emerald wave emblem inside orbit rings, above the wordmark SVG Studio and the subtitle Descriptive SVG Studio.</desc>
+            <defs>
+              <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#7CFFB2"/>
+                <stop offset="50%" stop-color="#00E676"/>
+                <stop offset="100%" stop-color="#00B0FF"/>
+              </linearGradient>
+              <linearGradient id="bgGrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#071C15"/>
+                <stop offset="100%" stop-color="#0D3326"/>
+              </linearGradient>
+              <radialGradient id="gl" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#00E676" stop-opacity="0.42"/>
+                <stop offset="100%" stop-color="#00E676" stop-opacity="0"/>
+              </radialGradient>
+              <filter id="dropShadow" x="-20%" y="-20%" width="140%" height="140%">
+                <feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#000" flood-opacity="0.45"/>
+              </filter>
+            </defs>
+            <rect width="1000" height="700" rx="56" fill="#071C15"/>
+            <g transform="translate(500,250) scale(1.78)" opacity="1" filter="url(#dropShadow)">
+              <g stroke="#7CFFB2" stroke-opacity="0.12" stroke-width="1">
+                <circle cx="0" cy="0" r="95" fill="none" stroke-dasharray="4 6"/>
+                <circle cx="0" cy="0" r="120" fill="none"/>
+                <line x1="-135" y1="0" x2="135" y2="0"/><line x1="0" y1="-135" x2="0" y2="135"/>
+              </g><circle cx="0" cy="0" r="98" fill="none" stroke="url(#g)" stroke-width="6" opacity=".85"/>
+              <circle cx="0" cy="0" r="108" fill="none" stroke="#FFFFFF" stroke-width="1.5" stroke-dasharray="10 8" opacity=".35"/>
+              <circle cx="0" cy="0" r="70" fill="url(#g)" opacity=".2"/>
+              <path d="M-74,-22 Q-37,-60 0,-22 T74,-22" fill="none" stroke="url(#g)" stroke-width="18" stroke-linecap="round"/>
+              <path d="M-74,14 Q-37,-24 0,14 T74,14" fill="none" stroke="#00E676" stroke-width="18" stroke-linecap="round"/>
+              <path d="M-54,48 Q-27,20 0,48 T54,48" fill="none" stroke="#fff" stroke-width="12" stroke-linecap="round" opacity=".9"/>
+            </g>
+            <text x="500" y="515" text-anchor="middle" font-family="'Inter', sans-serif" font-size="84" font-weight="900" letter-spacing="8" fill="url(#g)">SVG Studio</text>
+            <text x="500" y="559" text-anchor="middle" font-family="'Inter', sans-serif" font-size="23" font-weight="700" fill="#94A3B8" letter-spacing="6">Descriptive SVG Studio</text>
+            <rect x="380" y="583" width="240" height="6" rx="3" fill="#FFFFFF" opacity="0.25"/>
+          </svg>
+        </div>
+        <figcaption class="artboard__foot">
+          <span class="prompt"><span class="caret">›</span>“emerald wave, orbit ring, speed lines”</span>
+          <span class="meta--ok">● generated offline</span>
+        </figcaption>
+        <span class="chip chip--1" aria-hidden="true">orbit ring</span>
+        <span class="chip chip--2" aria-hidden="true">split two-tone</span>
+        <span class="chip chip--3" aria-hidden="true">#00E676</span>
+      </figure>
+    </div>
+  </section>
+
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker__track">
+      <div class="ticker__group">
+        <span>shield</span><span>orbit ring</span><span>bolt</span><span>split two-tone</span><span>wave</span><span>crown</span><span>neon</span><span>3D offset</span><span>rocket</span><span>sparkles</span><span>gem</span><span>tech brackets</span><span>speed lines</span><span>gold</span>
+      </div>
+      <div class="ticker__group">
+        <span>shield</span><span>orbit ring</span><span>bolt</span><span>split two-tone</span><span>wave</span><span>crown</span><span>neon</span><span>3D offset</span><span>rocket</span><span>sparkles</span><span>gem</span><span>tech brackets</span><span>speed lines</span><span>gold</span>
+      </div>
+    </div>
+  </div>
+
+  <section class="section" id="features">
+    <div class="wrap">
+      <header class="sec-head">
+        <div>
+          <p class="kicker">01 — The studio</p>
+          <h2>Everything a mark needs.</h2>
+        </div>
+        <p class="lead">Describe it, refine it, export it — without leaving the tab. Every control is built for one job: turning a sentence into a finished mark.</p>
+      </header>
+
+      <div class="features">
+        <article class="feature">
+          <span class="feature__num" aria-hidden="true">01</span>
+          <svg class="feature__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9L12 3Z"/><path d="M19 16l.7 2.1 2.1.7-2.1.7L19 22l-.7-2.5-2.1-.7 2.1-.7L19 16Z"/></svg>
+          <h3>Description in, design out</h3>
+          <p>Write “gold crown, shield frame, star sparkles” in English or Persian. The engine detects the shape, palette, ornaments and frame from the words. No account, no API call.</p>
+        </article>
+        <article class="feature">
+          <span class="feature__num" aria-hidden="true">02</span>
+          <svg class="feature__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></svg>
+          <h3>Typography, tuned</h3>
+          <p>Eleven typefaces and eleven treatments — split two-tone, 3D offset, hollow neon outline, tech brackets. Set the case, size, tracking or bend it on a curved path.</p>
+        </article>
+        <article class="feature">
+          <span class="feature__num" aria-hidden="true">03</span>
+          <svg class="feature__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><ellipse cx="12" cy="12" rx="10" ry="4.4" transform="rotate(-24 12 12)"/><circle cx="20.2" cy="6.6" r="1"/></svg>
+          <h3>Ornament system</h3>
+          <p>Orbit rings, speed lines, star sparkles, geometric grids and ambient glow. Toggle each one, or let the description pick the ornaments for you.</p>
+        </article>
+        <article class="feature">
+          <span class="feature__num" aria-hidden="true">04</span>
+          <svg class="feature__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 10v10"/></svg>
+          <h3>Layout &amp; mockups</h3>
+          <p>Six compositions, six frames, full z-order and opacity control. Preview the mark on a business card, an app icon, a website header or apparel before you commit.</p>
+        </article>
+        <article class="feature">
+          <span class="feature__num" aria-hidden="true">05</span>
+          <svg class="feature__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+          <h3>Exports that scale</h3>
+          <p>Download SVG, HD PNG, or a seven-size icon ZIP. Strip the background, embed the fonts, copy the raw code. The mark leaves clean and editable.</p>
+        </article>
+        <article class="feature">
+          <span class="feature__num" aria-hidden="true">06</span>
+          <svg class="feature__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.7 3.8 9S14.5 18.4 12 21c-2.5-2.6-3.8-5.7-3.8-9S9.5 5.6 12 3Z"/></svg>
+          <h3>Bilingual, offline</h3>
+          <p>Switch the entire interface between English and Persian, with RTL typography built in. Everything runs in the tab; your files never leave the machine.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--engine" id="engine">
+    <div class="wrap">
+      <header class="sec-head">
+        <div>
+          <p class="kicker">02 — The vocabulary</p>
+          <h2>No model.<br>Just geometry.</h2>
+        </div>
+        <p class="lead">SVG Studio PRO translates English or Persian keywords directly into clean SVG geometry and typographic compositions — offline. This is the whole language.</p>
+      </header>
+
+      <div class="parse">
+        <span class="parse__label">Description</span>
+        <p class="parse__input">“Gold crown, shield frame, star sparkles”</p>
+        <span class="parse__arrow" aria-hidden="true">→</span>
+        <div class="parse__out"><span>shape: crown</span><span>palette: gold</span><span>frame: shield</span><span>ornament: sparkles</span></div>
+      </div>
+
+      <div class="spec">
+        <div class="spec__col">
+          <h3>Shape keywords</h3>
+          <ul class="chips">
+            <li>stop</li><li>bolt</li><li>orbit</li><li>drop</li><li>wave</li><li>shield</li><li>flame</li><li>leaf</li><li>crown</li><li>rocket</li><li>brain/ai</li><li>code</li><li>coffee</li><li>mountain</li><li>gem</li><li>infinity</li><li>gear</li><li>heart</li><li>star</li><li>hex</li>
+          </ul>
+        </div>
+        <div class="spec__col">
+          <h3>Typography &amp; layout</h3>
+          <p class="spec__note">Eleven typefaces plus smart auto-match, and eleven treatments, including:</p>
+          <ul class="chips">
+            <li>split two-tone</li><li>3D offset</li><li>hollow neon outline</li><li>tech brackets</li><li>boxed stamp</li><li>multi-layer shadow</li><li>full gradient</li><li>minimal overline</li><li>curved text path</li>
+          </ul>
+        </div>
+        <div class="spec__col">
+          <h3>Ornament &amp; color</h3>
+          <p class="spec__note">Ornaments:</p>
+          <ul class="chips"><li>orbit ring</li><li>speed lines</li><li>sparkles / star</li><li>geometric grid</li><li>shield / hex frame</li><li>ambient glow</li></ul>
+          <p class="spec__note">Colors:</p>
+          <ul class="chips"><li>red</li><li>blue</li><li>cyan</li><li>gold</li><li>green</li><li>purple</li><li>neon</li><li>rose</li></ul>
+        </div>
+      </div>
+
+      <p class="engine__cta"><a href="studio.html">Put a sentence to work <span aria-hidden="true">→</span></a></p>
+    </div>
+  </section>
+
+  <section class="section" id="creator" aria-labelledby="creator-name">
+    <div class="wrap">
+      <p class="kicker">03 — The maker</p>
+      <div class="creator">
+        <div class="creator__portrait">
+          <img src="assets/hassan.jpg" width="240" height="240" alt="Hassan Samimi" decoding="async">
+          <span class="creator__handle">@hassan_samimi</span>
+        </div>
+        <div class="creator__body">
+          <h2 id="creator-name">Hassan Samimi</h2>
+          <p>Creator of SVG Studio PRO — a studio for people who think in words first.</p>
+          <ul class="socials">
+            <li><a href="https://x.com/hassan_samimi" target="_blank" rel="me noopener"><span class="s-name">X</span><span class="s-handle">@hassan_samimi</span><span class="s-arrow" aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a></li>
+            <li><a href="https://www.linkedin.com/in/hassan-samimi" target="_blank" rel="me noopener"><span class="s-name">LinkedIn</span><span class="s-handle">in/hassan-samimi</span><span class="s-arrow" aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a></li>
+            <li><a href="https://github.com/Nassami1" target="_blank" rel="me noopener"><span class="s-name">GitHub</span><span class="s-handle">Nassami1</span><span class="s-arrow" aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="finale">
+    <div class="wrap">
+      <p class="kicker">Start with a sentence</p>
+      <h2>Make your <em class="grad">mark.</em></h2>
+      <p>From the first line of description to the final SVG — it opens in a tab and stays on your machine.</p>
+      <a class="btn" href="studio.html">Open SVG Studio PRO <span aria-hidden="true">↗</span></a>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="wrap footer__in">
+    <a class="footer__brand" href="#top">
+      <svg viewBox="0 0 200 200" aria-hidden="true">
+        <defs>
+          <linearGradient id="footG" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#7CFFB2"/><stop offset="50%" stop-color="#00E676"/><stop offset="100%" stop-color="#00B0FF"/>
+          </linearGradient>
+        </defs>
+        <rect width="200" height="200" rx="44" fill="#071C15"/>
+        <circle cx="100" cy="100" r="78" fill="none" stroke="url(#footG)" stroke-width="6"/>
+        <circle cx="100" cy="100" r="86" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width="2" stroke-dasharray="8 6"/>
+        <path d="M48,100 Q74,72 100,100 T152,100" fill="none" stroke="url(#footG)" stroke-width="14" stroke-linecap="round"/>
+      </svg>
+      <span>SVG Studio PRO</span>
+    </a>
+    <span>© 2026 Hassan Samimi</span>
+    <a class="footer__link" href="studio.html">Open studio ↗</a>
+  </div>
+</footer>
+</body>
+</html>
